@@ -87,7 +87,11 @@ class Bucket {
       logging = new BucketLogging.fromJson(json["logging"]);
     }
     if (json.containsKey("metageneration")) {
-      metageneration = json["metageneration"];
+      if(json["metageneration"] is core.String){
+        metageneration = core.int.parse(json["metageneration"]);
+      }else{
+        metageneration = json["metageneration"];
+      }
     }
     if (json.containsKey("name")) {
       name = json["name"];
@@ -646,7 +650,11 @@ class Channel {
       address = json["address"];
     }
     if (json.containsKey("expiration")) {
-      expiration = json["expiration"];
+      if(json["expiration"] is core.String){
+        expiration = core.int.parse(json["expiration"]);
+      }else{
+        expiration = json["expiration"];
+      }
     }
     if (json.containsKey("id")) {
       id = json["id"];
@@ -796,7 +804,11 @@ class ComposeRequestSourceObjects {
   /** Create new ComposeRequestSourceObjects from JSON data */
   ComposeRequestSourceObjects.fromJson(core.Map json) {
     if (json.containsKey("generation")) {
-      generation = json["generation"];
+      if(json["generation"] is core.String){
+        generation = core.int.parse(json["generation"]);
+      }else{
+        generation = json["generation"];
+      }
     }
     if (json.containsKey("name")) {
       name = json["name"];
@@ -836,7 +848,11 @@ class ComposeRequestSourceObjectsObjectPreconditions {
   /** Create new ComposeRequestSourceObjectsObjectPreconditions from JSON data */
   ComposeRequestSourceObjectsObjectPreconditions.fromJson(core.Map json) {
     if (json.containsKey("ifGenerationMatch")) {
-      ifGenerationMatch = json["ifGenerationMatch"];
+      if(json["ifGenerationMatch"] is core.String){
+        ifGenerationMatch = core.int.parse(json["ifGenerationMatch"]);
+      }else{
+        ifGenerationMatch = json["ifGenerationMatch"];
+      }
     }
   }
 
@@ -964,7 +980,11 @@ class Object {
       etag = json["etag"];
     }
     if (json.containsKey("generation")) {
-      generation = json["generation"];
+      if(json["generation"] is core.String){
+        generation = core.int.parse(json["generation"]);
+      }else{
+        generation = json["generation"];
+      }
     }
     if (json.containsKey("id")) {
       id = json["id"];
@@ -982,7 +1002,11 @@ class Object {
       metadata = new ObjectMetadata.fromJson(json["metadata"]);
     }
     if (json.containsKey("metageneration")) {
-      metageneration = json["metageneration"];
+      if(json["metageneration"] is core.String){
+        metageneration = core.int.parse(json["metageneration"]);
+      }else{
+        metageneration = json["metageneration"];
+      }
     }
     if (json.containsKey("name")) {
       name = json["name"];
@@ -1213,7 +1237,11 @@ class ObjectAccessControl {
       etag = json["etag"];
     }
     if (json.containsKey("generation")) {
-      generation = json["generation"];
+      if(json["generation"] is core.String){
+        generation = core.int.parse(json["generation"]);
+      }else{
+        generation = json["generation"];
+      }
     }
     if (json.containsKey("id")) {
       id = json["id"];

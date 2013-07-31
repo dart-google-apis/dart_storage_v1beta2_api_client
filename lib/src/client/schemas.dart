@@ -1,4 +1,4 @@
-part of storage_v1beta2_api_client;
+part of storage_v1beta2_api;
 
 /** A bucket. */
 class Bucket {
@@ -21,6 +21,9 @@ class Bucket {
   /** The kind of item this is. For buckets, this is always storage#bucket. */
   core.String kind;
 
+  /** The bucket's lifecycle configuration. See object lifecycle management for more information. */
+  BucketLifecycle lifecycle;
+
   /** The location of the bucket. Object data for objects in the bucket resides in physical storage within this region. Typical values are US and EU. Defaults to US. See the developer's guide for the authoritative list. */
   core.String location;
 
@@ -39,7 +42,7 @@ class Bucket {
   /** The URI of this bucket. */
   core.String selfLink;
 
-  /** The bucket's storage class. This defines how objects in the bucket will be stored and determines the SLA and the cost of storage. Can be STANDARD or DRA. Defaults to STANDARD. */
+  /** The bucket's storage class. This defines how objects in the bucket will be stored and determines the SLA and the cost of storage. Typical values are STANDARD and DURABLE_REDUCED_AVAILABILITY. Defaults to STANDARD. See the developer's guide for the authoritative list. */
   core.String storageClass;
 
   /** Creation time of the bucket in RFC 3339 format. */
@@ -54,22 +57,13 @@ class Bucket {
   /** Create new Bucket from JSON data */
   Bucket.fromJson(core.Map json) {
     if (json.containsKey("acl")) {
-      acl = [];
-      json["acl"].forEach((item) {
-        acl.add(new BucketAccessControl.fromJson(item));
-      });
+      acl = json["acl"].map((aclItem) => new BucketAccessControl.fromJson(aclItem)).toList();
     }
     if (json.containsKey("cors")) {
-      cors = [];
-      json["cors"].forEach((item) {
-        cors.add(new BucketCors.fromJson(item));
-      });
+      cors = json["cors"].map((corsItem) => new BucketCors.fromJson(corsItem)).toList();
     }
     if (json.containsKey("defaultObjectAcl")) {
-      defaultObjectAcl = [];
-      json["defaultObjectAcl"].forEach((item) {
-        defaultObjectAcl.add(new ObjectAccessControl.fromJson(item));
-      });
+      defaultObjectAcl = json["defaultObjectAcl"].map((defaultObjectAclItem) => new ObjectAccessControl.fromJson(defaultObjectAclItem)).toList();
     }
     if (json.containsKey("etag")) {
       etag = json["etag"];
@@ -80,6 +74,9 @@ class Bucket {
     if (json.containsKey("kind")) {
       kind = json["kind"];
     }
+    if (json.containsKey("lifecycle")) {
+      lifecycle = new BucketLifecycle.fromJson(json["lifecycle"]);
+    }
     if (json.containsKey("location")) {
       location = json["location"];
     }
@@ -87,11 +84,7 @@ class Bucket {
       logging = new BucketLogging.fromJson(json["logging"]);
     }
     if (json.containsKey("metageneration")) {
-      if(json["metageneration"] is core.String){
-        metageneration = core.int.parse(json["metageneration"]);
-      }else{
-        metageneration = json["metageneration"];
-      }
+      metageneration = (json["metageneration"] is core.String) ? core.int.parse(json["metageneration"]) : json["metageneration"];
     }
     if (json.containsKey("name")) {
       name = json["name"];
@@ -121,22 +114,13 @@ class Bucket {
     var output = new core.Map();
 
     if (acl != null) {
-      output["acl"] = new core.List();
-      acl.forEach((item) {
-        output["acl"].add(item.toJson());
-      });
+      output["acl"] = acl.map((aclItem) => aclItem.toJson()).toList();
     }
     if (cors != null) {
-      output["cors"] = new core.List();
-      cors.forEach((item) {
-        output["cors"].add(item.toJson());
-      });
+      output["cors"] = cors.map((corsItem) => corsItem.toJson()).toList();
     }
     if (defaultObjectAcl != null) {
-      output["defaultObjectAcl"] = new core.List();
-      defaultObjectAcl.forEach((item) {
-        output["defaultObjectAcl"].add(item.toJson());
-      });
+      output["defaultObjectAcl"] = defaultObjectAcl.map((defaultObjectAclItem) => defaultObjectAclItem.toJson()).toList();
     }
     if (etag != null) {
       output["etag"] = etag;
@@ -146,6 +130,9 @@ class Bucket {
     }
     if (kind != null) {
       output["kind"] = kind;
+    }
+    if (lifecycle != null) {
+      output["lifecycle"] = lifecycle.toJson();
     }
     if (location != null) {
       output["location"] = location;
@@ -182,6 +169,250 @@ class Bucket {
   }
 
   /** Return String representation of Bucket */
+  core.String toString() => JSON.stringify(this.toJson());
+
+}
+
+class BucketCors {
+
+  /** The value, in seconds, to return in the  Access-Control-Max-Age header used in preflight responses. */
+  core.int maxAgeSeconds;
+
+  /** The list of HTTP methods on which to include CORS response headers, e.g. GET, OPTIONS, POST. Note, "*" is permitted in the list of methods, and means "any method". */
+  core.List<core.String> method;
+
+  /** The list of Origins eligible to receive CORS response headers. Note: "*" is permitted in the list of origins, and means "any Origin". */
+  core.List<core.String> origin;
+
+  /** The list of HTTP headers other than the simple response headers to give permission for the user-agent to share across domains. */
+  core.List<core.String> responseHeader;
+
+  /** Create new BucketCors from JSON data */
+  BucketCors.fromJson(core.Map json) {
+    if (json.containsKey("maxAgeSeconds")) {
+      maxAgeSeconds = json["maxAgeSeconds"];
+    }
+    if (json.containsKey("method")) {
+      method = json["method"].toList();
+    }
+    if (json.containsKey("origin")) {
+      origin = json["origin"].toList();
+    }
+    if (json.containsKey("responseHeader")) {
+      responseHeader = json["responseHeader"].toList();
+    }
+  }
+
+  /** Create JSON Object for BucketCors */
+  core.Map toJson() {
+    var output = new core.Map();
+
+    if (maxAgeSeconds != null) {
+      output["maxAgeSeconds"] = maxAgeSeconds;
+    }
+    if (method != null) {
+      output["method"] = method.toList();
+    }
+    if (origin != null) {
+      output["origin"] = origin.toList();
+    }
+    if (responseHeader != null) {
+      output["responseHeader"] = responseHeader.toList();
+    }
+
+    return output;
+  }
+
+  /** Return String representation of BucketCors */
+  core.String toString() => JSON.stringify(this.toJson());
+
+}
+
+/** The bucket's lifecycle configuration. See object lifecycle management for more information. */
+class BucketLifecycle {
+
+  /** A lifecycle management rule, which is made of an action to take and the condition(s) under which the action will be taken. */
+  core.List<BucketLifecycleRule> rule;
+
+  /** Create new BucketLifecycle from JSON data */
+  BucketLifecycle.fromJson(core.Map json) {
+    if (json.containsKey("rule")) {
+      rule = json["rule"].map((ruleItem) => new BucketLifecycleRule.fromJson(ruleItem)).toList();
+    }
+  }
+
+  /** Create JSON Object for BucketLifecycle */
+  core.Map toJson() {
+    var output = new core.Map();
+
+    if (rule != null) {
+      output["rule"] = rule.map((ruleItem) => ruleItem.toJson()).toList();
+    }
+
+    return output;
+  }
+
+  /** Return String representation of BucketLifecycle */
+  core.String toString() => JSON.stringify(this.toJson());
+
+}
+
+class BucketLifecycleRule {
+
+  /** The action to take. */
+  BucketLifecycleRuleAction action;
+
+  /** The condition(s) under which the action will be taken. */
+  BucketLifecycleRuleCondition condition;
+
+  /** Create new BucketLifecycleRule from JSON data */
+  BucketLifecycleRule.fromJson(core.Map json) {
+    if (json.containsKey("action")) {
+      action = new BucketLifecycleRuleAction.fromJson(json["action"]);
+    }
+    if (json.containsKey("condition")) {
+      condition = new BucketLifecycleRuleCondition.fromJson(json["condition"]);
+    }
+  }
+
+  /** Create JSON Object for BucketLifecycleRule */
+  core.Map toJson() {
+    var output = new core.Map();
+
+    if (action != null) {
+      output["action"] = action.toJson();
+    }
+    if (condition != null) {
+      output["condition"] = condition.toJson();
+    }
+
+    return output;
+  }
+
+  /** Return String representation of BucketLifecycleRule */
+  core.String toString() => JSON.stringify(this.toJson());
+
+}
+
+/** The action to take. */
+class BucketLifecycleRuleAction {
+
+  /** Type of the action, e.g. Delete. */
+  core.String type;
+
+  /** Create new BucketLifecycleRuleAction from JSON data */
+  BucketLifecycleRuleAction.fromJson(core.Map json) {
+    if (json.containsKey("type")) {
+      type = json["type"];
+    }
+  }
+
+  /** Create JSON Object for BucketLifecycleRuleAction */
+  core.Map toJson() {
+    var output = new core.Map();
+
+    if (type != null) {
+      output["type"] = type;
+    }
+
+    return output;
+  }
+
+  /** Return String representation of BucketLifecycleRuleAction */
+  core.String toString() => JSON.stringify(this.toJson());
+
+}
+
+/** The condition(s) under which the action will be taken. */
+class BucketLifecycleRuleCondition {
+
+  /** Age of an object (in days). This condition is satisfied when an object reaches the specified age. */
+  core.int age;
+
+  /** A date in RFC 3339 format with only the date part, e.g. "2013-01-15". This condition is satisfied when an object is created before midnight of the specified date in UTC. */
+  core.String createdBefore;
+
+  /** Relevant only for versioned objects. If the value is true, this condition matches live objects; if the value is false, it matches archived objects. */
+  core.bool isLive;
+
+  /** Relevant only for versioned objects. If the value is N, this condition is satisfied when there are at least N versions (including the live version) newer than this version of the object. */
+  core.int numNewerVersions;
+
+  /** Create new BucketLifecycleRuleCondition from JSON data */
+  BucketLifecycleRuleCondition.fromJson(core.Map json) {
+    if (json.containsKey("age")) {
+      age = json["age"];
+    }
+    if (json.containsKey("createdBefore")) {
+      createdBefore = json["createdBefore"];
+    }
+    if (json.containsKey("isLive")) {
+      isLive = json["isLive"];
+    }
+    if (json.containsKey("numNewerVersions")) {
+      numNewerVersions = json["numNewerVersions"];
+    }
+  }
+
+  /** Create JSON Object for BucketLifecycleRuleCondition */
+  core.Map toJson() {
+    var output = new core.Map();
+
+    if (age != null) {
+      output["age"] = age;
+    }
+    if (createdBefore != null) {
+      output["createdBefore"] = createdBefore;
+    }
+    if (isLive != null) {
+      output["isLive"] = isLive;
+    }
+    if (numNewerVersions != null) {
+      output["numNewerVersions"] = numNewerVersions;
+    }
+
+    return output;
+  }
+
+  /** Return String representation of BucketLifecycleRuleCondition */
+  core.String toString() => JSON.stringify(this.toJson());
+
+}
+
+/** The bucket's logging configuration, which defines the destination bucket and optional name prefix for the current bucket's logs. */
+class BucketLogging {
+
+  /** The destination bucket where the current bucket's logs should be placed. */
+  core.String logBucket;
+
+  /** A prefix for log object names. */
+  core.String logObjectPrefix;
+
+  /** Create new BucketLogging from JSON data */
+  BucketLogging.fromJson(core.Map json) {
+    if (json.containsKey("logBucket")) {
+      logBucket = json["logBucket"];
+    }
+    if (json.containsKey("logObjectPrefix")) {
+      logObjectPrefix = json["logObjectPrefix"];
+    }
+  }
+
+  /** Create JSON Object for BucketLogging */
+  core.Map toJson() {
+    var output = new core.Map();
+
+    if (logBucket != null) {
+      output["logBucket"] = logBucket;
+    }
+    if (logObjectPrefix != null) {
+      output["logObjectPrefix"] = logObjectPrefix;
+    }
+
+    return output;
+  }
+
+  /** Return String representation of BucketLogging */
   core.String toString() => JSON.stringify(this.toJson());
 
 }
@@ -287,117 +518,6 @@ class BucketWebsite {
   }
 
   /** Return String representation of BucketWebsite */
-  core.String toString() => JSON.stringify(this.toJson());
-
-}
-
-class BucketCors {
-
-  /** The value, in seconds, to return in the  Access-Control-Max-Age header used in preflight responses. */
-  core.int maxAgeSeconds;
-
-  /** The list of HTTP methods on which to include CORS response headers, e.g. GET, OPTIONS, POST. Note, "*" is permitted in the list of methods, and means "any method". */
-  core.List<core.String> method;
-
-  /** The list of Origins eligible to receive CORS response headers. Note: "*" is permitted in the list of origins, and means "any Origin". */
-  core.List<core.String> origin;
-
-  /** The list of HTTP headers other than the simple response headers to give permission for the user-agent to share across domains. */
-  core.List<core.String> responseHeader;
-
-  /** Create new BucketCors from JSON data */
-  BucketCors.fromJson(core.Map json) {
-    if (json.containsKey("maxAgeSeconds")) {
-      maxAgeSeconds = json["maxAgeSeconds"];
-    }
-    if (json.containsKey("method")) {
-      method = [];
-      json["method"].forEach((item) {
-        method.add(item);
-      });
-    }
-    if (json.containsKey("origin")) {
-      origin = [];
-      json["origin"].forEach((item) {
-        origin.add(item);
-      });
-    }
-    if (json.containsKey("responseHeader")) {
-      responseHeader = [];
-      json["responseHeader"].forEach((item) {
-        responseHeader.add(item);
-      });
-    }
-  }
-
-  /** Create JSON Object for BucketCors */
-  core.Map toJson() {
-    var output = new core.Map();
-
-    if (maxAgeSeconds != null) {
-      output["maxAgeSeconds"] = maxAgeSeconds;
-    }
-    if (method != null) {
-      output["method"] = new core.List();
-      method.forEach((item) {
-        output["method"].add(item);
-      });
-    }
-    if (origin != null) {
-      output["origin"] = new core.List();
-      origin.forEach((item) {
-        output["origin"].add(item);
-      });
-    }
-    if (responseHeader != null) {
-      output["responseHeader"] = new core.List();
-      responseHeader.forEach((item) {
-        output["responseHeader"].add(item);
-      });
-    }
-
-    return output;
-  }
-
-  /** Return String representation of BucketCors */
-  core.String toString() => JSON.stringify(this.toJson());
-
-}
-
-/** The bucket's logging configuration, which defines the destination bucket and optional name prefix for the current bucket's logs. */
-class BucketLogging {
-
-  /** The destination bucket where the current bucket's logs should be placed. */
-  core.String logBucket;
-
-  /** A prefix for log object names. */
-  core.String logObjectPrefix;
-
-  /** Create new BucketLogging from JSON data */
-  BucketLogging.fromJson(core.Map json) {
-    if (json.containsKey("logBucket")) {
-      logBucket = json["logBucket"];
-    }
-    if (json.containsKey("logObjectPrefix")) {
-      logObjectPrefix = json["logObjectPrefix"];
-    }
-  }
-
-  /** Create JSON Object for BucketLogging */
-  core.Map toJson() {
-    var output = new core.Map();
-
-    if (logBucket != null) {
-      output["logBucket"] = logBucket;
-    }
-    if (logObjectPrefix != null) {
-      output["logObjectPrefix"] = logObjectPrefix;
-    }
-
-    return output;
-  }
-
-  /** Return String representation of BucketLogging */
   core.String toString() => JSON.stringify(this.toJson());
 
 }
@@ -530,10 +650,7 @@ class BucketAccessControls {
   /** Create new BucketAccessControls from JSON data */
   BucketAccessControls.fromJson(core.Map json) {
     if (json.containsKey("items")) {
-      items = [];
-      json["items"].forEach((item) {
-        items.add(new BucketAccessControl.fromJson(item));
-      });
+      items = json["items"].map((itemsItem) => new BucketAccessControl.fromJson(itemsItem)).toList();
     }
     if (json.containsKey("kind")) {
       kind = json["kind"];
@@ -545,10 +662,7 @@ class BucketAccessControls {
     var output = new core.Map();
 
     if (items != null) {
-      output["items"] = new core.List();
-      items.forEach((item) {
-        output["items"].add(item.toJson());
-      });
+      output["items"] = items.map((itemsItem) => itemsItem.toJson()).toList();
     }
     if (kind != null) {
       output["kind"] = kind;
@@ -577,10 +691,7 @@ class Buckets {
   /** Create new Buckets from JSON data */
   Buckets.fromJson(core.Map json) {
     if (json.containsKey("items")) {
-      items = [];
-      json["items"].forEach((item) {
-        items.add(new Bucket.fromJson(item));
-      });
+      items = json["items"].map((itemsItem) => new Bucket.fromJson(itemsItem)).toList();
     }
     if (json.containsKey("kind")) {
       kind = json["kind"];
@@ -595,10 +706,7 @@ class Buckets {
     var output = new core.Map();
 
     if (items != null) {
-      output["items"] = new core.List();
-      items.forEach((item) {
-        output["items"].add(item.toJson());
-      });
+      output["items"] = items.map((itemsItem) => itemsItem.toJson()).toList();
     }
     if (kind != null) {
       output["kind"] = kind;
@@ -630,7 +738,7 @@ class Channel {
   core.String kind;
 
   /** Additional parameters controlling delivery channel behavior */
-  ChannelParams params;
+  core.Map<core.String, core.String> params;
 
   /** An opaque id that identifies the resource that is being watched. Stable across different API versions */
   core.String resourceId;
@@ -650,11 +758,7 @@ class Channel {
       address = json["address"];
     }
     if (json.containsKey("expiration")) {
-      if(json["expiration"] is core.String){
-        expiration = core.int.parse(json["expiration"]);
-      }else{
-        expiration = json["expiration"];
-      }
+      expiration = (json["expiration"] is core.String) ? core.int.parse(json["expiration"]) : json["expiration"];
     }
     if (json.containsKey("id")) {
       id = json["id"];
@@ -663,7 +767,7 @@ class Channel {
       kind = json["kind"];
     }
     if (json.containsKey("params")) {
-      params = new ChannelParams.fromJson(json["params"]);
+      params = _mapMap(json["params"]);
     }
     if (json.containsKey("resourceId")) {
       resourceId = json["resourceId"];
@@ -696,7 +800,7 @@ class Channel {
       output["kind"] = kind;
     }
     if (params != null) {
-      output["params"] = params.toJson();
+      output["params"] = _mapMap(params);
     }
     if (resourceId != null) {
       output["resourceId"] = resourceId;
@@ -715,26 +819,6 @@ class Channel {
   }
 
   /** Return String representation of Channel */
-  core.String toString() => JSON.stringify(this.toJson());
-
-}
-
-/** Additional parameters controlling delivery channel behavior */
-class ChannelParams {
-
-  /** Create new ChannelParams from JSON data */
-  ChannelParams.fromJson(core.Map json) {
-  }
-
-  /** Create JSON Object for ChannelParams */
-  core.Map toJson() {
-    var output = new core.Map();
-
-
-    return output;
-  }
-
-  /** Return String representation of ChannelParams */
   core.String toString() => JSON.stringify(this.toJson());
 
 }
@@ -760,10 +844,7 @@ class ComposeRequest {
       kind = json["kind"];
     }
     if (json.containsKey("sourceObjects")) {
-      sourceObjects = [];
-      json["sourceObjects"].forEach((item) {
-        sourceObjects.add(new ComposeRequestSourceObjects.fromJson(item));
-      });
+      sourceObjects = json["sourceObjects"].map((sourceObjectsItem) => new ComposeRequestSourceObjects.fromJson(sourceObjectsItem)).toList();
     }
   }
 
@@ -778,10 +859,7 @@ class ComposeRequest {
       output["kind"] = kind;
     }
     if (sourceObjects != null) {
-      output["sourceObjects"] = new core.List();
-      sourceObjects.forEach((item) {
-        output["sourceObjects"].add(item.toJson());
-      });
+      output["sourceObjects"] = sourceObjects.map((sourceObjectsItem) => sourceObjectsItem.toJson()).toList();
     }
 
     return output;
@@ -799,16 +877,13 @@ class ComposeRequestSourceObjects {
 
   /** The source object's name. The source object's bucket is implicitly the destination bucket. */
   core.String name;
+
   ComposeRequestSourceObjectsObjectPreconditions objectPreconditions;
 
   /** Create new ComposeRequestSourceObjects from JSON data */
   ComposeRequestSourceObjects.fromJson(core.Map json) {
     if (json.containsKey("generation")) {
-      if(json["generation"] is core.String){
-        generation = core.int.parse(json["generation"]);
-      }else{
-        generation = json["generation"];
-      }
+      generation = (json["generation"] is core.String) ? core.int.parse(json["generation"]) : json["generation"];
     }
     if (json.containsKey("name")) {
       name = json["name"];
@@ -848,11 +923,7 @@ class ComposeRequestSourceObjectsObjectPreconditions {
   /** Create new ComposeRequestSourceObjectsObjectPreconditions from JSON data */
   ComposeRequestSourceObjectsObjectPreconditions.fromJson(core.Map json) {
     if (json.containsKey("ifGenerationMatch")) {
-      if(json["ifGenerationMatch"] is core.String){
-        ifGenerationMatch = core.int.parse(json["ifGenerationMatch"]);
-      }else{
-        ifGenerationMatch = json["ifGenerationMatch"];
-      }
+      ifGenerationMatch = (json["ifGenerationMatch"] is core.String) ? core.int.parse(json["ifGenerationMatch"]) : json["ifGenerationMatch"];
     }
   }
 
@@ -921,7 +992,7 @@ class Object {
   core.String mediaLink;
 
   /** User-provided metadata, in key/value pairs. */
-  ObjectMetadata metadata;
+  core.Map<core.String, core.String> metadata;
 
   /** The generation of the metadata for this object at this generation. Used for metadata versioning. Has no meaning outside of the context of this generation. */
   core.int metageneration;
@@ -947,10 +1018,7 @@ class Object {
   /** Create new Object from JSON data */
   Object.fromJson(core.Map json) {
     if (json.containsKey("acl")) {
-      acl = [];
-      json["acl"].forEach((item) {
-        acl.add(new ObjectAccessControl.fromJson(item));
-      });
+      acl = json["acl"].map((aclItem) => new ObjectAccessControl.fromJson(aclItem)).toList();
     }
     if (json.containsKey("bucket")) {
       bucket = json["bucket"];
@@ -980,11 +1048,7 @@ class Object {
       etag = json["etag"];
     }
     if (json.containsKey("generation")) {
-      if(json["generation"] is core.String){
-        generation = core.int.parse(json["generation"]);
-      }else{
-        generation = json["generation"];
-      }
+      generation = (json["generation"] is core.String) ? core.int.parse(json["generation"]) : json["generation"];
     }
     if (json.containsKey("id")) {
       id = json["id"];
@@ -999,14 +1063,10 @@ class Object {
       mediaLink = json["mediaLink"];
     }
     if (json.containsKey("metadata")) {
-      metadata = new ObjectMetadata.fromJson(json["metadata"]);
+      metadata = _mapMap(json["metadata"]);
     }
     if (json.containsKey("metageneration")) {
-      if(json["metageneration"] is core.String){
-        metageneration = core.int.parse(json["metageneration"]);
-      }else{
-        metageneration = json["metageneration"];
-      }
+      metageneration = (json["metageneration"] is core.String) ? core.int.parse(json["metageneration"]) : json["metageneration"];
     }
     if (json.containsKey("name")) {
       name = json["name"];
@@ -1033,10 +1093,7 @@ class Object {
     var output = new core.Map();
 
     if (acl != null) {
-      output["acl"] = new core.List();
-      acl.forEach((item) {
-        output["acl"].add(item.toJson());
-      });
+      output["acl"] = acl.map((aclItem) => aclItem.toJson()).toList();
     }
     if (bucket != null) {
       output["bucket"] = bucket;
@@ -1081,7 +1138,7 @@ class Object {
       output["mediaLink"] = mediaLink;
     }
     if (metadata != null) {
-      output["metadata"] = metadata.toJson();
+      output["metadata"] = _mapMap(metadata);
     }
     if (metageneration != null) {
       output["metageneration"] = metageneration;
@@ -1109,26 +1166,6 @@ class Object {
   }
 
   /** Return String representation of Object */
-  core.String toString() => JSON.stringify(this.toJson());
-
-}
-
-/** User-provided metadata, in key/value pairs. */
-class ObjectMetadata {
-
-  /** Create new ObjectMetadata from JSON data */
-  ObjectMetadata.fromJson(core.Map json) {
-  }
-
-  /** Create JSON Object for ObjectMetadata */
-  core.Map toJson() {
-    var output = new core.Map();
-
-
-    return output;
-  }
-
-  /** Return String representation of ObjectMetadata */
   core.String toString() => JSON.stringify(this.toJson());
 
 }
@@ -1237,11 +1274,7 @@ class ObjectAccessControl {
       etag = json["etag"];
     }
     if (json.containsKey("generation")) {
-      if(json["generation"] is core.String){
-        generation = core.int.parse(json["generation"]);
-      }else{
-        generation = json["generation"];
-      }
+      generation = (json["generation"] is core.String) ? core.int.parse(json["generation"]) : json["generation"];
     }
     if (json.containsKey("id")) {
       id = json["id"];
@@ -1312,11 +1345,17 @@ class ObjectAccessControl {
 /** An access-control list. */
 class ObjectAccessControls {
 
+  /** The list of items. */
+  core.List<core.Object> items;
+
   /** The kind of item this is. For lists of object access control entries, this is always storage#objectAccessControls. */
   core.String kind;
 
   /** Create new ObjectAccessControls from JSON data */
   ObjectAccessControls.fromJson(core.Map json) {
+    if (json.containsKey("items")) {
+      items = json["items"].toList();
+    }
     if (json.containsKey("kind")) {
       kind = json["kind"];
     }
@@ -1326,6 +1365,9 @@ class ObjectAccessControls {
   core.Map toJson() {
     var output = new core.Map();
 
+    if (items != null) {
+      output["items"] = items.toList();
+    }
     if (kind != null) {
       output["kind"] = kind;
     }
@@ -1356,10 +1398,7 @@ class Objects {
   /** Create new Objects from JSON data */
   Objects.fromJson(core.Map json) {
     if (json.containsKey("items")) {
-      items = [];
-      json["items"].forEach((item) {
-        items.add(new Object.fromJson(item));
-      });
+      items = json["items"].map((itemsItem) => new Object.fromJson(itemsItem)).toList();
     }
     if (json.containsKey("kind")) {
       kind = json["kind"];
@@ -1368,10 +1407,7 @@ class Objects {
       nextPageToken = json["nextPageToken"];
     }
     if (json.containsKey("prefixes")) {
-      prefixes = [];
-      json["prefixes"].forEach((item) {
-        prefixes.add(item);
-      });
+      prefixes = json["prefixes"].toList();
     }
   }
 
@@ -1380,10 +1416,7 @@ class Objects {
     var output = new core.Map();
 
     if (items != null) {
-      output["items"] = new core.List();
-      items.forEach((item) {
-        output["items"].add(item.toJson());
-      });
+      output["items"] = items.map((itemsItem) => itemsItem.toJson()).toList();
     }
     if (kind != null) {
       output["kind"] = kind;
@@ -1392,10 +1425,7 @@ class Objects {
       output["nextPageToken"] = nextPageToken;
     }
     if (prefixes != null) {
-      output["prefixes"] = new core.List();
-      prefixes.forEach((item) {
-        output["prefixes"].add(item);
-      });
+      output["prefixes"] = prefixes.toList();
     }
 
     return output;
@@ -1406,3 +1436,16 @@ class Objects {
 
 }
 
+core.Map _mapMap(core.Map source, [core.Object convert(core.Object source) = null]) {
+  assert(source != null);
+  var result = new dart_collection.LinkedHashMap();
+  source.forEach((core.String key, value) {
+    assert(key != null);
+    if(convert == null) {
+      result[key] = value;
+    } else {
+      result[key] = convert(value);
+    }
+  });
+  return result;
+}

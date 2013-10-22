@@ -169,7 +169,7 @@ class Bucket {
   }
 
   /** Return String representation of Bucket */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -224,7 +224,7 @@ class BucketCors {
   }
 
   /** Return String representation of BucketCors */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -253,7 +253,7 @@ class BucketLifecycle {
   }
 
   /** Return String representation of BucketLifecycle */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -290,7 +290,7 @@ class BucketLifecycleRule {
   }
 
   /** Return String representation of BucketLifecycleRule */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -319,7 +319,7 @@ class BucketLifecycleRuleAction {
   }
 
   /** Return String representation of BucketLifecycleRuleAction */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -375,7 +375,7 @@ class BucketLifecycleRuleCondition {
   }
 
   /** Return String representation of BucketLifecycleRuleCondition */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -413,7 +413,7 @@ class BucketLogging {
   }
 
   /** Return String representation of BucketLogging */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -451,7 +451,7 @@ class BucketOwner {
   }
 
   /** Return String representation of BucketOwner */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -480,7 +480,7 @@ class BucketVersioning {
   }
 
   /** Return String representation of BucketVersioning */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -518,7 +518,7 @@ class BucketWebsite {
   }
 
   /** Return String representation of BucketWebsite */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -539,8 +539,12 @@ class BucketAccessControl {
 - user-email 
 - group-groupId 
 - group-email 
+- domain-domain 
 - allUsers 
-- allAuthenticatedUsers */
+- allAuthenticatedUsers Examples: 
+- The user liz@example.com would be user-liz@example.com. 
+- The group example@googlegroups.com would be group-example@googlegroups.com. 
+- To refer to all members of the Google Apps for Business domain example.com, the entity would be domain-example.com. */
   core.String entity;
 
   /** The ID for the entity, if any. */
@@ -634,7 +638,7 @@ class BucketAccessControl {
   }
 
   /** Return String representation of BucketAccessControl */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -672,7 +676,7 @@ class BucketAccessControls {
   }
 
   /** Return String representation of BucketAccessControls */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -719,37 +723,40 @@ class Buckets {
   }
 
   /** Return String representation of Buckets */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
 class Channel {
 
-  /** The address of the receiving entity where events are delivered. Specific to the channel type. */
+  /** The address where notifications are delivered for this channel. */
   core.String address;
 
-  /** The expiration instant for this channel if it is defined. */
+  /** Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional. */
   core.int expiration;
 
-  /** A UUID for the channel */
+  /** A UUID or similar unique string that identifies this channel. */
   core.String id;
 
-  /** A channel watching an API resource */
+  /** Identifies this as a notification channel used to watch for changes to a resource. Value: the fixed string "api#channel". */
   core.String kind;
 
-  /** Additional parameters controlling delivery channel behavior */
+  /** Additional parameters controlling delivery channel behavior. Optional. */
   core.Map<core.String, core.String> params;
 
-  /** An opaque id that identifies the resource that is being watched. Stable across different API versions */
+  /** A Boolean value to indicate whether payload is wanted. Optional. */
+  core.bool payload;
+
+  /** An opaque ID that identifies the resource being watched on this channel. Stable across different API versions. */
   core.String resourceId;
 
-  /** The canonicalized ID of the watched resource. */
+  /** A version-specific identifier for the watched resource. */
   core.String resourceUri;
 
-  /** An arbitrary string associated with the channel that is delivered to the target address with each event delivered over this channel. */
+  /** An arbitrary string delivered to the target address with each notification delivered over this channel. Optional. */
   core.String token;
 
-  /** The type of delivery mechanism used by this channel */
+  /** The type of delivery mechanism used for this channel. */
   core.String type;
 
   /** Create new Channel from JSON data */
@@ -768,6 +775,9 @@ class Channel {
     }
     if (json.containsKey("params")) {
       params = _mapMap(json["params"]);
+    }
+    if (json.containsKey("payload")) {
+      payload = json["payload"];
     }
     if (json.containsKey("resourceId")) {
       resourceId = json["resourceId"];
@@ -802,6 +812,9 @@ class Channel {
     if (params != null) {
       output["params"] = _mapMap(params);
     }
+    if (payload != null) {
+      output["payload"] = payload;
+    }
     if (resourceId != null) {
       output["resourceId"] = resourceId;
     }
@@ -819,7 +832,7 @@ class Channel {
   }
 
   /** Return String representation of Channel */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -866,7 +879,7 @@ class ComposeRequest {
   }
 
   /** Return String representation of ComposeRequest */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -911,7 +924,7 @@ class ComposeRequestSourceObjects {
   }
 
   /** Return String representation of ComposeRequestSourceObjects */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -939,7 +952,7 @@ class ComposeRequestSourceObjectsObjectPreconditions {
   }
 
   /** Return String representation of ComposeRequestSourceObjectsObjectPreconditions */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -1166,7 +1179,7 @@ class Object {
   }
 
   /** Return String representation of Object */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -1204,7 +1217,7 @@ class ObjectOwner {
   }
 
   /** Return String representation of ObjectOwner */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -1225,8 +1238,12 @@ class ObjectAccessControl {
 - user-email 
 - group-groupId 
 - group-email 
+- domain-domain 
 - allUsers 
-- allAuthenticatedUsers */
+- allAuthenticatedUsers Examples: 
+- The user liz@example.com would be user-liz@example.com. 
+- The group example@googlegroups.com would be group-example@googlegroups.com. 
+- To refer to all members of the Google Apps for Business domain example.com, the entity would be domain-example.com. */
   core.String entity;
 
   /** The ID for the entity, if any. */
@@ -1338,7 +1355,7 @@ class ObjectAccessControl {
   }
 
   /** Return String representation of ObjectAccessControl */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -1376,7 +1393,7 @@ class ObjectAccessControls {
   }
 
   /** Return String representation of ObjectAccessControls */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 
@@ -1432,7 +1449,7 @@ class Objects {
   }
 
   /** Return String representation of Objects */
-  core.String toString() => JSON.stringify(this.toJson());
+  core.String toString() => JSON.encode(this.toJson());
 
 }
 

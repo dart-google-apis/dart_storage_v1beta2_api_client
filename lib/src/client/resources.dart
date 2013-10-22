@@ -522,6 +522,7 @@ class ChannelsResource_ {
       _client = client;
 
   /**
+   * Stop watching resources through this channel
    *
    * [request] - Channel to send in this request
    *

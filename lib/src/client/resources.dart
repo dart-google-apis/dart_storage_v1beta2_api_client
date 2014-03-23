@@ -12,7 +12,7 @@ class BucketAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -48,7 +48,7 @@ class BucketAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -155,7 +155,7 @@ class BucketAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -194,7 +194,7 @@ class BucketAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -564,7 +564,7 @@ class DefaultObjectAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -600,7 +600,7 @@ class DefaultObjectAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -672,9 +672,13 @@ class DefaultObjectAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
+   * [ifMetagenerationMatch] - Makes the operation conditional on whether the destination object's current metageneration matches the given value.
+   *
+   * [ifMetagenerationNotMatch] - Makes the operation conditional on whether the destination object's current metageneration does not match the given value.
+   *
    * [optParams] - Additional query parameters
    */
-  async.Future<ObjectAccessControls> list(core.String bucket, {core.Map optParams}) {
+  async.Future<ObjectAccessControls> list(core.String bucket, {core.String ifMetagenerationMatch, core.String ifMetagenerationNotMatch, core.Map optParams}) {
     var url = "b/{bucket}/defaultObjectAcl";
     var urlParams = new core.Map();
     var queryParams = new core.Map();
@@ -682,6 +686,8 @@ class DefaultObjectAccessControlsResource_ {
     var paramErrors = new core.List();
     if (bucket == null) paramErrors.add("bucket is required");
     if (bucket != null) urlParams["bucket"] = bucket;
+    if (ifMetagenerationMatch != null) queryParams["ifMetagenerationMatch"] = ifMetagenerationMatch;
+    if (ifMetagenerationNotMatch != null) queryParams["ifMetagenerationNotMatch"] = ifMetagenerationNotMatch;
     if (optParams != null) {
       optParams.forEach((key, value) {
         if (value != null && queryParams[key] == null) {
@@ -707,7 +713,7 @@ class DefaultObjectAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -746,7 +752,7 @@ class DefaultObjectAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [optParams] - Additional query parameters
    */
@@ -793,7 +799,7 @@ class ObjectAccessControlsResource_ {
    *
    * [object] - Name of the object.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [generation] - If present, selects a specific revision of this object (as opposed to the latest version, the default).
    *
@@ -836,7 +842,7 @@ class ObjectAccessControlsResource_ {
    *
    * [object] - Name of the object.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [generation] - If present, selects a specific revision of this object (as opposed to the latest version, the default).
    *
@@ -964,7 +970,7 @@ class ObjectAccessControlsResource_ {
    *
    * [object] - Name of the object.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [generation] - If present, selects a specific revision of this object (as opposed to the latest version, the default).
    *
@@ -1010,7 +1016,7 @@ class ObjectAccessControlsResource_ {
    *
    * [object] - Name of the object.
    *
-   * [entity] - The entity holding the permission. Can be user-userId, group-groupId, allUsers, or allAuthenticatedUsers.
+   * [entity] - The entity holding the permission. Can be user-userId, user-emailAddress, group-groupId, group-emailAddress, allUsers, or allAuthenticatedUsers.
    *
    * [generation] - If present, selects a specific revision of this object (as opposed to the latest version, the default).
    *

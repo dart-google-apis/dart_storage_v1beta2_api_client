@@ -727,6 +727,7 @@ class Buckets {
 
 }
 
+/** An notification channel used to watch for resource changes. */
 class Channel {
 
   /** The address where notifications are delivered for this channel. */
@@ -891,6 +892,7 @@ class ComposeRequestSourceObjects {
   /** The source object's name. The source object's bucket is implicitly the destination bucket. */
   core.String name;
 
+  /** Conditions that must be met for this operation to execute. */
   ComposeRequestSourceObjectsObjectPreconditions objectPreconditions;
 
   /** Create new ComposeRequestSourceObjects from JSON data */
@@ -928,6 +930,7 @@ class ComposeRequestSourceObjects {
 
 }
 
+/** Conditions that must be met for this operation to execute. */
 class ComposeRequestSourceObjectsObjectPreconditions {
 
   /** Only perform the composition if the generation of the source object that would be used matches this value. If this value and a generation are both specified, they must be the same value or the call will fail. */
@@ -1022,6 +1025,9 @@ class Object {
   /** Content-Length of the data in bytes. */
   core.String size;
 
+  /** Storage class of the object. */
+  core.String storageClass;
+
   /** Deletion time of the object in RFC 3339 format. Will be returned if and only if this version of the object has been deleted. */
   core.String timeDeleted;
 
@@ -1092,6 +1098,9 @@ class Object {
     }
     if (json.containsKey("size")) {
       size = json["size"];
+    }
+    if (json.containsKey("storageClass")) {
+      storageClass = json["storageClass"];
     }
     if (json.containsKey("timeDeleted")) {
       timeDeleted = json["timeDeleted"];
@@ -1167,6 +1176,9 @@ class Object {
     }
     if (size != null) {
       output["size"] = size;
+    }
+    if (storageClass != null) {
+      output["storageClass"] = storageClass;
     }
     if (timeDeleted != null) {
       output["timeDeleted"] = timeDeleted;

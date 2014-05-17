@@ -672,13 +672,13 @@ class DefaultObjectAccessControlsResource_ {
    *
    * [bucket] - Name of a bucket.
    *
-   * [ifMetagenerationMatch] - Makes the operation conditional on whether the destination object's current metageneration matches the given value.
+   * [ifMetagenerationMatch] - If present, only return default ACL listing if the bucket's current metageneration matches this value.
    *
-   * [ifMetagenerationNotMatch] - Makes the operation conditional on whether the destination object's current metageneration does not match the given value.
+   * [ifMetagenerationNotMatch] - If present, only return default ACL listing if the bucket's current metageneration does not match the given value.
    *
    * [optParams] - Additional query parameters
    */
-  async.Future<ObjectAccessControls> list(core.String bucket, {core.String ifMetagenerationMatch, core.String ifMetagenerationNotMatch, core.Map optParams}) {
+  async.Future<ObjectAccessControls> list(core.String bucket, {core.int ifMetagenerationMatch, core.int ifMetagenerationNotMatch, core.Map optParams}) {
     var url = "b/{bucket}/defaultObjectAcl";
     var urlParams = new core.Map();
     var queryParams = new core.Map();

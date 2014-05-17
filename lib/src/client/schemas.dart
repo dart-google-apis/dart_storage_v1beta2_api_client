@@ -36,13 +36,13 @@ class Bucket {
   /** The name of the bucket. */
   core.String name;
 
-  /** The owner of the bucket. This will always be the project team's owner group. */
+  /** The owner of the bucket. This is always the project team's owner group. */
   BucketOwner owner;
 
   /** The URI of this bucket. */
   core.String selfLink;
 
-  /** The bucket's storage class. This defines how objects in the bucket will be stored and determines the SLA and the cost of storage. Typical values are STANDARD and DURABLE_REDUCED_AVAILABILITY. Defaults to STANDARD. See the developer's guide for the authoritative list. */
+  /** The bucket's storage class. This defines how objects in the bucket are stored and determines the SLA and the cost of storage. Typical values are STANDARD and DURABLE_REDUCED_AVAILABILITY. Defaults to STANDARD. See the developer's guide for the authoritative list. */
   core.String storageClass;
 
   /** Creation time of the bucket in RFC 3339 format. */
@@ -178,7 +178,7 @@ class BucketCors {
   /** The value, in seconds, to return in the  Access-Control-Max-Age header used in preflight responses. */
   core.int maxAgeSeconds;
 
-  /** The list of HTTP methods on which to include CORS response headers, e.g. GET, OPTIONS, POST. Note, "*" is permitted in the list of methods, and means "any method". */
+  /** The list of HTTP methods on which to include CORS response headers: GET, OPTIONS, POST, etc. Note, "*" is permitted in the list of methods, and means "any method". */
   core.List<core.String> method;
 
   /** The list of Origins eligible to receive CORS response headers. Note: "*" is permitted in the list of origins, and means "any Origin". */
@@ -297,7 +297,7 @@ class BucketLifecycleRule {
 /** The action to take. */
 class BucketLifecycleRuleAction {
 
-  /** Type of the action, e.g. Delete. */
+  /** Type of the action. Currently only Delete is supported. */
   core.String type;
 
   /** Create new BucketLifecycleRuleAction from JSON data */
@@ -417,7 +417,7 @@ class BucketLogging {
 
 }
 
-/** The owner of the bucket. This will always be the project team's owner group. */
+/** The owner of the bucket. This is always the project team's owner group. */
 class BucketOwner {
 
   /** The entity, in the form group-groupId. */

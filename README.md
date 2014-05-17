@@ -14,7 +14,7 @@ Adding dependency to pubspec.yaml
 
 ```
   dependencies:
-    google_storage_v1beta2_api: '>=0.4.6'
+    google_storage_v1beta2_api: '>=0.4.7'
 ```
 
 For web applications:
